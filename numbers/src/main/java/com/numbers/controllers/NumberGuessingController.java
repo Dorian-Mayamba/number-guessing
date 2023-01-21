@@ -1,6 +1,8 @@
 package com.numbers.controllers;
 
 import com.numbers.exceptions.EmptyNumberFieldException;
+import com.numbers.exceptions.NoRemainingAttemptsException;
+import com.numbers.users.User;
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -25,6 +27,7 @@ public class NumberGuessingController{
 
     private int attempts = 0;
 
+    private int remainingAttemps = 10;
     private String message;
 
     private int numberToGuess;
@@ -32,6 +35,7 @@ public class NumberGuessingController{
     private final int MAX_SCORE = 10;
 
     private int currentScore = 10;
+    private User user;
 
     @FXML
     public void onSubmitClick() {
@@ -41,6 +45,8 @@ public class NumberGuessingController{
             attempts++;
             if (numberFound(choice,numberToGuess)){
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                currentScore = calculatePlayerScore(attempts);
+                user.setScore(currentScore);
                 alert.setTitle("Number is found");
                 alert.setContentText("congrats you found the mystery number in "+ attempts + " attemps");
                 PauseTransition closeDelay = new PauseTransition(Duration.seconds(3));
@@ -63,6 +69,8 @@ public class NumberGuessingController{
                 closeDelay.setOnFinished(e->alert.close());
                 alert.setOnShown(e->closeDelay.playFromStart());
                 alert.showAndWait();
+                remainingAttemps--;
+                checkRemainingAttempts(remainingAttemps);
             }
 
         }catch (NumberFormatException ex){
@@ -81,19 +89,40 @@ public class NumberGuessingController{
             alert.setOnShown(e->closeDelay.playFromStart());
             alert.setContentText("an error as occured "+ ex.getMessage());
             alert.showAndWait();
+        }catch (NoRemainingAttemptsException ex){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("No remaining try");
+            PauseTransition closeDelay = new PauseTransition(Duration.millis(3000));
+            closeDelay.setOnFinished(e->alert.close());
+            alert.setOnShown(e->closeDelay.playFromStart());
+            alert.setContentText("an error as occured "+ ex.getMessage());
+            alert.showAndWait();
+            Stage stage = (Stage) playerScore.getScene().getWindow();
+            stage.close();
         }
     }
 
     private boolean numberFound(int numberGuessed, int numberToGuess){
         return numberGuessed == numberToGuess;
     }
-    public void displayPlayerName(String name){
+
+    public void setUser(User user){
+        this.user = user;
+        displayPlayerName(user.getUserName());
+    }
+    private void displayPlayerName(String name){
         playerName.setText(name);
     }
 
     public void initNumberToGuess(){
         Random rnd = new Random();
         this.numberToGuess = rnd.nextInt(MAX_NUMBER) + 1;
+    }
+
+    private void checkRemainingAttempts(int remainingAttempts) throws NoRemainingAttemptsException{
+        if (remainingAttempts == 0){
+            throw new NoRemainingAttemptsException("No remaining attempts, GAME OVER!!!");
+        }
     }
 
     private void checkEmpty(String numberField) throws EmptyNumberFieldException {
@@ -104,6 +133,15 @@ public class NumberGuessingController{
 
     public void initPlayerScore(int score){
         playerScore.setText(Integer.toString(score));
+    }
+
+    public int calculatePlayerScore(int numberOfAttemps){
+        if(numberOfAttemps == 1){
+            return MAX_SCORE;
+        } else if (numberOfAttemps >=2 && numberOfAttemps < MAX_SCORE) {
+            return MAX_SCORE - numberOfAttemps;
+        }
+        return 0;
     }
 
     private void setMessage(String message){

@@ -20,7 +20,7 @@ public class NumberGuessingGame {
         FXMLLoader loader = new FXMLLoader(NumberGuessingGame.class.getResource("/com.numbers.game/game-view.fxml"));
         Scene scene = new Scene(loader.load());
         NumberGuessingController controller = loader.getController();
-        controller.displayPlayerName(user.getUserName());
+        controller.setUser(user);
         controller.initPlayerScore(user.getScore());
         controller.initNumberToGuess();
         stage.setScene(scene);
