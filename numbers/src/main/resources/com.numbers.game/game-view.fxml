@@ -5,8 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
-fx:controller="com.numbers.controllers.NumberGuessingController">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.numbers.controllers.NumberGuessingController">
    <children>
       <HBox prefHeight="349.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
          <children>
@@ -30,6 +29,16 @@ fx:controller="com.numbers.controllers.NumberGuessingController">
                            </font>
                         </Label>
                         <Label fx:id="playerScore" layoutX="84.0" layoutY="170.0" prefHeight="25.0" prefWidth="75.0" textFill="#32c9b0">
+                           <font>
+                              <Font name="Verdana Bold Italic" size="20.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="-1.0" layoutY="232.0" prefHeight="25.0" prefWidth="172.0" text="remainingAttempts" textFill="#32c9b0">
+                           <font>
+                              <Font name="Verdana Bold Italic" size="15.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="remainingAttemptsLbl" layoutX="50.0" layoutY="265.0" prefHeight="25.0" prefWidth="75.0" textFill="#32c9b0">
                            <font>
                               <Font name="Verdana Bold Italic" size="20.0" />
                            </font>

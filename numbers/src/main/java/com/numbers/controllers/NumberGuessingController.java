@@ -23,11 +23,15 @@ public class NumberGuessingController{
     @FXML
     Label playerScore;
 
+    @FXML
+
+    Label remainingAttemptsLbl;
+
     private final int MAX_NUMBER = 1000;
 
     private int attempts = 0;
 
-    private int remainingAttemps = 10;
+    private int remainingAttempts = 10;
     private String message;
 
     private int numberToGuess;
@@ -59,18 +63,27 @@ public class NumberGuessingController{
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("failure");
                 if(choice < numberToGuess){
-                    setMessage("too low!!");
+                    if (Math.abs(choice-numberToGuess) <= 10){
+                        setMessage("you are getting closer !!");
+                    }else{
+                        setMessage("too low!!");
+                    }
                     alert.setContentText(message);
                 }else{
-                    setMessage("too high!!");
+                    if (choice - numberToGuess <= 10){
+                        setMessage("you are getting closer !!");
+                    }else{
+                        setMessage("too high!!");
+                    }
                     alert.setContentText(message);
                 }
                 PauseTransition closeDelay = new PauseTransition(Duration.seconds(3));
                 closeDelay.setOnFinished(e->alert.close());
                 alert.setOnShown(e->closeDelay.playFromStart());
                 alert.showAndWait();
-                remainingAttemps--;
-                checkRemainingAttempts(remainingAttemps);
+                remainingAttempts--;
+                remainingAttemptsLbl.setText(Integer.toString(remainingAttempts));
+                checkRemainingAttempts(remainingAttempts);
             }
 
         }catch (NumberFormatException ex){
@@ -117,6 +130,10 @@ public class NumberGuessingController{
     public void initNumberToGuess(){
         Random rnd = new Random();
         this.numberToGuess = rnd.nextInt(MAX_NUMBER) + 1;
+    }
+
+    public void initRemainingAttempts(){
+        remainingAttemptsLbl.setText(Integer.toString(this.remainingAttempts));
     }
 
     private void checkRemainingAttempts(int remainingAttempts) throws NoRemainingAttemptsException{

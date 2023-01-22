@@ -23,6 +23,7 @@ public class NumberGuessingGame {
         controller.setUser(user);
         controller.initPlayerScore(user.getScore());
         controller.initNumberToGuess();
+        controller.initRemainingAttempts();
         stage.setScene(scene);
         stage.setTitle("Number guessing game");
         stage.show();
